@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <getopt.h>
 
+int KrpMajor = 0;
+int KrpMinor = 0;
+int KrpPatch = 2;
+
 void ChangeKeyRepeatDelay(char *Arg)
 {
     int16_t Rate;
@@ -33,11 +37,12 @@ void ChangeKeyRepeatRate(char *Arg)
 int ParseArguments(int Count, char **Args)
 {
     int Option;
-    const char *Short = "r:d:";
+    const char *Short = "r:d:v";
     struct option Long[] =
     {
         { "repeat-rate", required_argument, NULL, 'r' },
         { "delay-until-repeat", required_argument, NULL, 'd' },
+        { "version", no_argument, NULL, 'v' },
         { NULL, 0, NULL, 0 }
     };
 
@@ -53,6 +58,11 @@ int ParseArguments(int Count, char **Args)
             {
                 ChangeKeyRepeatDelay(optarg);
             } break;
+            case 'v':
+            {
+                printf("krp version %d.%d.%d\n",
+                        KrpMajor, KrpMinor, KrpPatch);
+            } break;
         }
     }
 
@@ -63,9 +73,9 @@ int main(int Count, char **Args)
 {
     if(Count < 2)
     {
-        fprintf(stderr, "Usage: <bin> --repeat-rate level\n\
-                                <bin> --delay-until-repeat level\n\n\
-                        <level>: 1 = 15ms, 2 = 30ms etc..\n");
+        fprintf(stderr, "Usage: krp -r | --repeat-rate <level>\n"
+                        "       krp -d | --delay-until-repeat <level>\n\n"
+                        "<level>: 1 = 15ms, 2 = 30ms etc..\n");
         exit(1);
     }
 
