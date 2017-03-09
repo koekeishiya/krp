@@ -26,6 +26,9 @@ This utility uses the same units as the above commands do.
 
     # set delay until repeat to 135ms
     krp -d | --delay-until-repeat 9
+
+    # print version
+    krp -v | --version
 ```
 
 ## Install
