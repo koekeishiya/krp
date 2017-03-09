@@ -1,8 +1,8 @@
 FRAMEWORKS     = -framework Carbon
 BUILD_PATH     = ./bin
 BUILD_FLAGS    = -std=gnu89 -Wall -g
-SRC        = ./src/krp.c
-BIN           = $(BUILD_PATH)/krp
+SRC            = ./src/krp.c
+BIN            = $(BUILD_PATH)/krp
 
 .PHONY: all clean install
 
