@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <getopt.h>
 
-int KrpMajor = 0;
+int KrpMajor = 1;
 int KrpMinor = 0;
-int KrpPatch = 3;
+int KrpPatch = 0;
 
 void ChangeKeyRepeatDelay(char *Arg)
 {
