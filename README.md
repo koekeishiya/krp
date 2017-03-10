@@ -4,18 +4,13 @@ Adjust keyrepeat and delay until repeat, **without** requiring a user logout or 
 
 Confirmed working on MacOS Sierra (10.12.3), but should also work on prior versions.
 
-This utility achieves the same effect as the typically used commands
+This utility achieves the same effect as modifying *NSGlobalDomain*:
 
 ```
-# these commands require a reboot / relog for the new settings to take effect.
-
+# these commands require a relog or reboot to take effect.
 defaults write NSGlobalDomain KeyRepeat -int 1
-
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
-
 ```
-
-This utility uses the same units as the above commands do.
 
 ## Usage
 ```
