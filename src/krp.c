@@ -4,7 +4,7 @@
 
 int KrpMajor = 0;
 int KrpMinor = 0;
-int KrpPatch = 2;
+int KrpPatch = 3;
 
 void ChangeKeyRepeatDelay(char *Arg)
 {
