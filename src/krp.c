@@ -17,6 +17,11 @@ void ChangeKeyRepeatDelay(char *Arg)
 
     int16_t OldRate = LMGetKeyRepThresh();
     LMSetKeyRepThresh(Rate);
+
+    char Command[256];
+    snprintf(Command, sizeof(Command), "defaults write NSGlobalDomain KeyRepeat -int %hd", Rate);
+    system(Command);
+
     printf("delay until repeat: %hd -> %hd\n", OldRate, Rate);
 }
 
@@ -31,6 +36,11 @@ void ChangeKeyRepeatRate(char *Arg)
 
     int16_t OldRate = LMGetKeyThresh();
     LMSetKeyThresh(Rate);
+
+    char Command[256];
+    snprintf(Command, sizeof(Command), "defaults write NSGlobalDomain InitialKeyRepeat -int %hd", Rate);
+    system(Command);
+
     printf("keyrepeat rate: %hd -> %hd\n", OldRate, Rate);
 }
 
