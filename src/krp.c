@@ -2,53 +2,56 @@
 #include <stdio.h>
 #include <getopt.h>
 
-int KrpMajor = 1;
-int KrpMinor = 0;
-int KrpPatch = 0;
+#define KRP_MAJOR 1
+#define KRP_MINOR 0
+#define KRP_PATCH 0
 
-void ChangeKeyRepeatDelay(char *Arg)
+extern void LMSetKeyThresh(int16_t rate);
+extern void LMSetKeyRepThresh(int16_t rate);
+
+void change_key_repeat_delay(char *arg)
 {
-    int16_t Rate;
-    if(sscanf(Arg, "%hd", &Rate) != 1)
-    {
-        fprintf(stderr, "invalid keyrepeat delay '%s'\n", Arg);
+    int16_t rate;
+
+    if (sscanf(arg, "%hd", &rate) != 1) {
+        fprintf(stderr, "invalid keyrepeat delay '%s'\n", arg);
         return;
     }
 
-    int16_t OldRate = LMGetKeyThresh();
-    LMSetKeyThresh(Rate);
+    int16_t old_rate = LMGetKeyThresh();
+    LMSetKeyThresh(rate);
 
-    char Command[256];
-    snprintf(Command, sizeof(Command), "defaults write NSGlobalDomain InitialKeyRepeat -int %hd", Rate);
-    system(Command);
+    char command[256];
+    snprintf(command, sizeof(command), "defaults write NSGlobalDomain InitialKeyRepeat -int %hd", rate);
+    system(command);
 
-    printf("delay until repeat: %hd -> %hd\n", OldRate, Rate);
+    printf("delay until repeat: %hd -> %hd\n", old_rate, rate);
 }
 
-void ChangeKeyRepeatRate(char *Arg)
+void change_key_repeat_rate(char *arg)
 {
-    int16_t Rate;
-    if(sscanf(Arg, "%hd", &Rate) != 1)
-    {
-        fprintf(stderr, "invalid keyrepeat rate '%s'\n", Arg);
+    int16_t rate;
+
+    if (sscanf(arg, "%hd", &rate) != 1) {
+        fprintf(stderr, "invalid keyrepeat rate '%s'\n", arg);
         return;
     }
 
-    int16_t OldRate = LMGetKeyRepThresh();
-    LMSetKeyRepThresh(Rate);
+    int16_t old_rate = LMGetKeyRepThresh();
+    LMSetKeyRepThresh(rate);
 
-    char Command[256];
-    snprintf(Command, sizeof(Command), "defaults write NSGlobalDomain KeyRepeat -int %hd", Rate);
-    system(Command);
+    char command[256];
+    snprintf(command, sizeof(command), "defaults write NSGlobalDomain KeyRepeat -int %hd", rate);
+    system(command);
 
-    printf("keyrepeat rate: %hd -> %hd\n", OldRate, Rate);
+    printf("keyrepeat rate: %hd -> %hd\n", old_rate, rate);
 }
 
-int ParseArguments(int Count, char **Args)
+int parse_arguments(int count, char **args)
 {
-    int Option;
-    const char *Short = "r:d:v";
-    struct option Long[] =
+    int option;
+    const char *short_options = "r:d:v";
+    struct option long_options[] =
     {
         { "repeat-rate", required_argument, NULL, 'r' },
         { "delay-until-repeat", required_argument, NULL, 'd' },
@@ -56,39 +59,32 @@ int ParseArguments(int Count, char **Args)
         { NULL, 0, NULL, 0 }
     };
 
-    while((Option = getopt_long(Count, Args, Short, Long, NULL)) != -1)
-    {
-        switch(Option)
-        {
-            case 'r':
-            {
-                ChangeKeyRepeatRate(optarg);
-            } break;
-            case 'd':
-            {
-                ChangeKeyRepeatDelay(optarg);
-            } break;
-            case 'v':
-            {
-                printf("krp version %d.%d.%d\n",
-                        KrpMajor, KrpMinor, KrpPatch);
-            } break;
+    while ((option = getopt_long(count, args, short_options, long_options, NULL)) != -1) {
+        switch (option) {
+        case 'r': {
+            change_key_repeat_rate(optarg);
+        } break;
+        case 'd': {
+            change_key_repeat_delay(optarg);
+        } break;
+        case 'v': {
+            printf("krp version %d.%d.%d\n", KRP_MAJOR, KRP_MINOR, KRP_PATCH);
+        } break;
         }
     }
 
     return 0;
 }
 
-int main(int Count, char **Args)
+int main(int count, char **args)
 {
-    if(Count < 2)
-    {
+    if (count < 2) {
         fprintf(stderr, "Usage: krp -r | --repeat-rate <level>\n"
                         "       krp -d | --delay-until-repeat <level>\n\n"
                         "<level>: 1 = 15ms, 2 = 30ms etc..\n");
         exit(1);
     }
 
-    ParseArguments(Count, Args);
+    parse_arguments(count, args);
     return 0;
 }
