@@ -6,6 +6,10 @@
 #define KRP_MINOR 0
 #define KRP_PATCH 0
 
+//
+// these extern declarations are necessary to compile on macOS Big Sur
+//
+
 extern void LMSetKeyThresh(int16_t rate);
 extern void LMSetKeyRepThresh(int16_t rate);
 
